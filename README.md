@@ -2,17 +2,11 @@
 
 [DUCTF-2023](https://www.facebook.com/CSEDUSC)'s challenges along with their write-ups.
 
-Challenges from both the mock contest and the main contest are present here. 
+Challenges from both the mock contest and the main contest are present here.
 
 # Getting Started
 
-
-
-
 # Installations
-
-
-
 
 # Contribution
 
