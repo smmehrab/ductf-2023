@@ -10,4 +10,8 @@ Files
 
 ## Solution
 
-Add the challenge solution here.
+The provided link is about Steganography. so we searched for Steganography decoder online.
+
+https://stylesuxx.github.io/steganography/
+
+Using this online tool we got the flag.
