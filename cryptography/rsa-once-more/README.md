@@ -12,8 +12,6 @@ Files
 
 ## Solution
 
-Add the challenge solution here.
-**Crypto/RSA once more**
 https://en.wikipedia.org/wiki/Shor%27s_algorithm -> Explains Shors Algorithm
 What we guessed here was that the MagicDevice.exe would give us the order given an integer `a`, that is the smallest possible integer `r`, s.t. `a^r = 1 (mod n)`. This can be verified easily that it works. 
 - Now wikipedia mentions how it's hard to solve for an odd `r`
