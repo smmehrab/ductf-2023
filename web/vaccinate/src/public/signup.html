@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+</head>
+<body>
+  <h2>Sign Up</h2>
+  <form id="signup-form">
+    <label for="signup-username">Username:</label>
+    <input type="text" id="signup-username" required>
+    <br>
+    <label for="signup-password">Password:</label>
+    <input type="password" id="signup-password" required>
+    <br>
+    <br>
+    <button type="submit">Sign Up</button>
+  </form>
+  <p>Already have an account? <a href="signin.html">Sign In</a></p>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+  
+      const username = document.getElementById('signup-username').value;
+      const password = document.getElementById('signup-password').value;
+  
+      try {
+        const signupResponse = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
+  
+        const signupData = await signupResponse.json();
+  
+        if (signupResponse.ok) {
+          alert(signupData.message);
+  
+          // Automatically sign in after successful sign-up
+          const signinResponse = await fetch('/api/signin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+          });
+  
+          const signinData = await signinResponse.json();
+  
+          if (signinResponse.ok) {
+            alert(signinData.message);
+            window.location.href = '/profile.html';
+          } else {
+            alert(signinData.error || 'Error during sign-in after sign-up');
+          }
+        } else {
+          alert(signupData.error || 'Error during sign-up');
+        }
+      } catch (error) {
+        console.error('Error during sign-up:', error);
+        alert('An unexpected error occurred during sign-up');
+      }
+    });
+
+  </script>
+  
+</body>
+</html>

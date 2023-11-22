@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote</title>
+  <style>
+    body {
+        padding: 200px; /* Adjust the value as needed */
+    }
+
+    /* Add some basic styling */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+      border: none; /* Remove table border */
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      margin-bottom: 20px;
+    }
+
+    /* Add additional styling for the result section and signout button */
+    #result-section {
+      margin-top: 20px;
+    }
+
+    #signout-btn {
+      border: none;
+      background-color: #ff0000;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Vote</h2>
+  <p class="subtitle">Do the Impossible</p> <!-- Added subtitle -->
+
+  <table>
+    <thead>
+      <tr>
+        <th>Candidate</th>
+        <th>Vote Count</th>
+        <th>Vote Button</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr id="abdullah-row">
+        <td>Abdullah</td>
+        <td id="abdullah-votes">0</td>
+        <td><button id="abdullah-btn">Vote</button></td>
+      </tr>
+      <tr id="mahmud-row">
+        <td>Mahmud</td>
+        <td id="mahmud-votes">0</td>
+        <td><button id="mahmud-btn">Vote</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Result section -->
+  <div id="result-section">
+    <h3 id="result-message"></h3>
+    <!-- Add elements to display election results -->
+  </div>
+
+  <!-- Signout button -->
+  <button id="signout-btn" onclick="signout()">Sign Out</button>
+
+  <script>
+    const abdullahRow = document.getElementById('abdullah-row');
+    const mahmudRow = document.getElementById('mahmud-row');
+    const abdullahVotesSpan = document.getElementById('abdullah-votes');
+    const mahmudVotesSpan = document.getElementById('mahmud-votes');
+
+  // Function to handle signout
+  async function signout() {
+    try {
+      const response = await fetch('/api/signout', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          credentials: 'include', // Include session credentials for authenticated requests
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        window.location.href = '/signin.html'; // Redirect to the signin page after signout
+      } else {
+        alert(data.error || 'Error during signout');
+      }
+    } catch (error) {
+      console.error('Error during signout:', error);
+      alert('An unexpected error occurred during signout');
+    }
+  }
+
+    // Function to make API requests
+    async function makeRequest(url, method, data) {
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            // Include session credentials for authenticated requests
+            credentials: 'include',
+          },
+          body: JSON.stringify(data),
+        });
+        return response.json();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function displayResults(abdullahVotes, mahmudVotes, flag) {
+    const resultMessage = document.getElementById('result-message');
+
+    if (abdullahVotes > mahmudVotes) {
+      resultMessage.textContent = "Abdullah Won! No Flag For You!";
+    } else if (mahmudVotes > abdullahVotes) {
+        resultMessage.textContent = "Mahmud Won!\nCongratulations!\n" + flag;
+    } else {
+      resultMessage.textContent = "It's a tie!";
+    }
+  }
+    // Function to update vote counts and show/hide vote buttons
+    async function getVoteCounts() {
+      const response = await makeRequest('/api/votes', 'GET');
+      if (response.ok) {
+        const abdullahVotes = response.vote_status.filter(vote => vote === 'Abdullah').length;
+        const mahmudVotes = response.vote_status.filter(vote => vote === 'Mahmud').length;
+
+        abdullahVotesSpan.textContent = abdullahVotes;
+        mahmudVotesSpan.textContent = mahmudVotes;
+
+        if(response.vote_status[0] !== null) {
+          document.getElementById('abdullah-btn').disabled = true;
+          document.getElementById('mahmud-btn').disabled = true;
+          displayResults(abdullahVotes, mahmudVotes, response.flag);
+        }
+        else {
+            document.getElementById('result-message').textContent = "";
+        }
+      }
+    }
+
+    getVoteCounts();
+
+    // Vote button click event for Abdullah
+    document.getElementById('abdullah-btn').addEventListener('click', async () => {
+      const response = await makeRequest('/api/user/1/vote', 'POST', { value: 'Abdullah' });
+      if (response.ok) {
+        alert(response.message);
+        getVoteCounts();
+      } else {
+        alert(response.error);
+      }
+    });
+
+    // Vote button click event for Mahmud
+    document.getElementById('mahmud-btn').addEventListener('click', async () => {
+      const response = await makeRequest('/api/user/1/vote', 'POST', { value: 'Mahmud' });
+      if (response.ok) {
+        alert(response.message);
+        getVoteCounts();
+      } else {
+        alert(response.error);
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+    "name": "vote",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "keywords": ["ductf", "web"],
+    "author": "smmehrab",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.17.1",
+      "express-session": "^1.17.2",
+      "sqlite3": "^5.0.2",
+      "body-parser": "^1.19.0"
+    }
+  }
+  

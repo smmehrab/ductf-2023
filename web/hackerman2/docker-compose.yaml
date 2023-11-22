@@ -1,0 +1,7 @@
+version: "3"
+services:
+  web:
+    image: hackerman2
+    build: .
+    ports:
+      - "5000:5000"

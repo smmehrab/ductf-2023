@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    
+    <div id="profile-info">
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Status:</strong> <span id="status"></span></p>
+        <p id="flag-section"><strong>Flag:</strong> <span id="flag"></span></p>
+    </div>
+
+    <!-- Change password form -->
+    <form id="change-password-form">
+        <label for="oldPassword">Old Password:</label>
+        <input type="password" id="oldPassword" name="oldPassword" required><br>
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword" required><br>
+
+        <button type="submit">Change Password</button>
+    </form>
+
+    <!-- Signout button -->
+    <button id="signout-btn">Sign Out</button>
+
+    <script>
+        function loadProfile() {
+            // Fetch user profile information from the server
+            fetch('/api/profile')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the profile information on the page
+                    document.getElementById('username').textContent = data.username;
+                    document.getElementById('status').textContent = data.status;
+
+                    // Check if the flag is present in the response and the status is 'vaccinated'
+                    if (data.flag && data.status === 'vaccinated') {
+                        // Display the flag section and the flag
+                        document.getElementById('flag-section').style.display = 'block';
+                        document.getElementById('flag').textContent = data.flag;
+                    } else {
+                        // Hide the flag section if no flag is present or the status is not 'vaccinated'
+                        document.getElementById('flag-section').style.display = 'none';
+                    }
+                })
+                .catch(error => console.error('Error fetching profile data:', error));
+        }
+
+        // Add event listener for the signout button
+        document.getElementById('signout-btn').addEventListener('click', () => {
+            // Send a signout request to the server
+            fetch('/api/signout', { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        // Redirect to the sign-in page after successful signout
+                        window.location.href = '/signin.html';
+                    } else {
+                        console.error('Error during signout:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error during signout:', error));
+        });
+
+        // Add event listener for the change password form
+        document.getElementById('change-password-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Get old and new password values
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            // Send a change password request to the server
+            fetch('/api/change-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: document.getElementById('username').textContent,
+                    oldPassword,
+                    newPassword,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                loadProfile();
+            })
+            .catch(error => console.error('Error changing password:', error));
+        });
+
+        // Initial load of the user profile information
+        loadProfile();
+    </script>
+</body>
+</html>
