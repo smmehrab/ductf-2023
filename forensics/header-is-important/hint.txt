@@ -1,0 +1,1 @@
+check header of png and bmp file
