@@ -6,7 +6,7 @@
 
 Files
 
-- [file](./file)
+- [prottoy25.png](./prottoy25.png)
 
 ## Solution
 
