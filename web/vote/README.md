@@ -3,7 +3,6 @@
 ## Challenge
 
 * Upon opening the challenge link, you are given a siup/signin portal.
-  [![Sign In Page](writeup-images/signin.png)]()
 * After successfully signing in, you will be shown the following Vote Page:
   [![Vote Page](writeup-images/after-signin.png)]()
 * You are allowed to cast only one vote. You can't change the vote after been casted.
