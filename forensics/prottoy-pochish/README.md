@@ -15,3 +15,5 @@ The provided link is about Steganography. so we searched for Steganography decod
 https://stylesuxx.github.io/steganography/
 
 Using this online tool we got the flag.
+
+![1700671401040](image/README/1700671401040.png)
