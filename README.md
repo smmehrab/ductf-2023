@@ -4,7 +4,7 @@
 
 Challenges from both the mock contest and the main contest are present here.
 
-## Contents
+## Challenges
 
 - [Cryptography](cryptography)
   - [Again RSA](cryptography/again-rsa)
