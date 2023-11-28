@@ -1,5 +1,19 @@
 # WEB
 
+## Contents
+
+The following WEB challenges had been set for the contest.
+
+- [Agent007](agent007)
+- [H4CK3RM4N](hackerman)
+- [H4CK3RM4N 2](hackerman2)
+- [Maze](maze)
+- [Secret](secret)
+- [Vaccinate](vaccinate)
+- [Vote](vote)
+
+## Run
+
 To run any of the WEB category challenges locally in your machine:
 
 1. You must have `npm` installed.
